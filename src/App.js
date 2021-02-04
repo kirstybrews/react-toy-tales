@@ -67,6 +67,28 @@ class App extends React.Component{
       
   }
 
+  increaseLikes = (toyObj) => {
+    const updatedToy = {
+      likes: toyObj.likes + 1
+    }
+
+    const reqPackage = {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
+      body: JSON.stringify(updatedToy)
+    }
+
+    fetch(URL + toyObj.id, reqPackage)
+      .then(res => res.json())
+      .then(updatedToy => {
+        this.setState({
+          toys: this.state.toys.map(toy => toy.id === updatedToy.id ? updatedToy : toy)
+        })
+      })
+  }
+
   render(){
     return (
       <>
@@ -80,7 +102,7 @@ class App extends React.Component{
         <div className="buttonContainer">
           <button onClick={this.handleClick}> Add a Toy </button>
         </div>
-        <ToyContainer toysArray={this.state.toys} handleDelete={this.handleDelete}/>
+        <ToyContainer toysArray={this.state.toys} handleDelete={this.handleDelete} increaseLikes={this.increaseLikes}/>
       </>
     );
   }
